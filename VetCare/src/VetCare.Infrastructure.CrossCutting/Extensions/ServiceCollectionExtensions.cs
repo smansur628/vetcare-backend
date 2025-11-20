@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-//using Microsoft.EntityFrameworkCore;
-//using Npgsql;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 //using Dapper;
 using MediatR;                                       // <- interfaces
 //using FluentValidation;
@@ -16,7 +16,7 @@ using VetCare.Infrastructure.CrossCutting.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-namespace VetCare.Infrastructure.CrossCutting.Extensions;
+using VetCare.Infrastructure.Data.Context;
 
 public static class ServiceCollectionExtensions
 {
@@ -67,11 +67,11 @@ public static class ServiceCollectionExtensions
     this IServiceCollection services, IConfiguration cfg)
     {
         // 1. Banco de Dados ----------------------------------------
-        //var cs = configuration.GetConnectionString("DefaultConnection")!;
+        var cs = cfg.GetConnectionString("DefaultConnection")!;
 
-        //services.AddDbContext<VetCareContext>(o =>
-        //o.UseNpgsql(cs)
-        //.UseSnakeCaseNamingConvention());            // EF Core
+        services.AddDbContext<VetCareContext>(opt =>
+        opt.UseNpgsql(cs)
+        .UseSnakeCaseNamingConvention());            // EF Core
 
         //services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(cs)); // Dapper
 

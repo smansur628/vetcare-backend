@@ -17,8 +17,9 @@ public class TenantMiddleware : IMiddleware
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         // 1) Header
-        if (context.Request.Headers.TryGetValue("X-Clinic", out var code))
+        if (context.Request.Headers.TryGetValue("X-Clinic", out var code)) {
             context.Items["TenantId"] = _hash.Decode(code!);
+        }            
 
         // 2) JWT Claim ‘cli’
         else if (context.User.Identity?.IsAuthenticated == true)
